@@ -658,10 +658,11 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
             mCurrentUserId = userId;
             WallpaperData wallpaper = getWallpaperSafeLocked(userId);
             KeyguardWallpaperData keygaurdWallpaper = getKeyguardWallpaperSafeLocked(userId);
-            if (mWallpaperObserver == null) {
-                mWallpaperObserver = new WallpaperObserver(wallpaper, keygaurdWallpaper);
-                mWallpaperObserver.startWatching();
-            }
+            if (mWallpaperObserver != null) {
+                mWallpaperObserver.stopWatching();
+             }
+            mWallpaperObserver = new WallpaperObserver(wallpaper, keygaurdWallpaper);
+            mWallpaperObserver.startWatching();
             switchWallpaper(wallpaper, reply);
         }
     }
