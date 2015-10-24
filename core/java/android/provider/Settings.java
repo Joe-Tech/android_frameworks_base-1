@@ -2452,6 +2452,26 @@ public final class Settings {
         public static final int SCREEN_BRIGHTNESS_MODE_AUTOMATIC = 1;
 
         /**
+
+         * Whether to show battery saver notification
+         * @hide
+         */
+        public static final String BATTERY_SAVER_NOTIFICATION = "battery_saver_notification";
+
+        /**
+         * Whether to show low battery notification
+         * @hide
+         */
+        public static final String BATTERY_LOW_NOTIFICATION = "battery_low_notification";
+
+        /**
+         * Whether to control brightness from status bar
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+
+        /**
          * Control whether the process CPU usage meter should be shown.
          *
          * @deprecated Use {@link Global#SHOW_PROCESSES} instead
