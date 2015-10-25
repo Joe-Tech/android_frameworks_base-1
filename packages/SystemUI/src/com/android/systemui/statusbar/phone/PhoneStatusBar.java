@@ -27,6 +27,7 @@ import android.app.IActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
+import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
@@ -154,6 +155,7 @@ import com.android.systemui.statusbar.policy.RotationLockControllerImpl;
 import com.android.systemui.statusbar.policy.SecurityControllerImpl;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
+import com.android.systemui.statusbar.policy.WeatherControllerImpl;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout.OnChildLocationsChangedListener;
@@ -218,6 +220,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private static final int STATUS_OR_NAV_TRANSIENT =
             View.STATUS_BAR_TRANSIENT | View.NAVIGATION_BAR_TRANSIENT;
     private static final long AUTOHIDE_TIMEOUT_MS = 3000;
+    private static final long AUTOHIDE_TIMEOUT_MS_PROVISIONING = 0;
 
     /** The minimum delay in ms between reports of notification visibility. */
     private static final int VISIBILITY_REPORT_MIN_DELAY_MS = 500;
@@ -274,6 +277,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     KeyguardMonitor mKeyguardMonitor;
     BrightnessMirrorController mBrightnessMirrorController;
     AccessibilityController mAccessibilityController;
+    WeatherControllerImpl mWeatherController;
 
     int mNaturalBarHeight = -1;
 
@@ -311,8 +315,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     KeyguardIndicationController mKeyguardIndicationController;
 
     private boolean mKeyguardFadingAway;
+    private boolean mKeyguardShowingMedia;
     private long mKeyguardFadingAwayDelay;
     private long mKeyguardFadingAwayDuration;
+
+    private Bitmap mKeyguardWallpaper;
 
     int mKeyguardMaxNotificationCount;
 
@@ -620,6 +627,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Global.getUriFor(SETTING_HEADS_UP_TICKER), true,
                     mHeadsUpObserver);
         }
+
+        WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                Context.WALLPAPER_SERVICE);
+        mKeyguardWallpaper = wm.getKeyguardBitmap();
+
         mUnlockMethodCache = UnlockMethodCache.getInstance(mContext);
         mUnlockMethodCache.addListener(this);
         startKeyguard();
@@ -863,6 +875,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mUserSwitcherController = new UserSwitcherController(mContext, mKeyguardMonitor,
                     mHandler);
         }
+        mWeatherController = new WeatherControllerImpl(mContext);
+
         mKeyguardUserSwitcher = new KeyguardUserSwitcher(mContext,
                 (ViewStub) mStatusBarWindow.findViewById(R.id.keyguard_user_switcher),
                 mKeyguardStatusBar, mNotificationPanel, mUserSwitcherController);
@@ -905,6 +919,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 .setBatteryController(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
         mHeader.setNextAlarmController(mNextAlarmController);
+        mHeader.setWeatherController(mWeatherController);
 
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mBroadcastReceiver.onReceive(mContext,
@@ -916,6 +931,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED);
         context.registerReceiverAsUser(mBroadcastReceiver, UserHandle.ALL, filter, null, null);
 
         IntentFilter demoFilter = new IntentFilter();
@@ -1681,18 +1697,30 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     + " state=" + mState);
         }
 
-        Bitmap artworkBitmap = null;
+        Bitmap backdropBitmap = null;
+
+        // apply any album artwork first
         if (mMediaMetadata != null) {
-            artworkBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
-            if (artworkBitmap == null) {
-                artworkBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+            backdropBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
+            if (backdropBitmap == null) {
+                backdropBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
                 // might still be null
             }
         }
 
-        final boolean hasArtwork = artworkBitmap != null;
+        // apply user lockscreen image
+        if (mMediaMetadata == null && backdropBitmap == null) {
+            WallpaperManager wm = (WallpaperManager)
+                    mContext.getSystemService(Context.WALLPAPER_SERVICE);
+            if (wm != null) {
+                backdropBitmap = mKeyguardWallpaper;
+            }
+        }
 
-        if ((hasArtwork || DEBUG_MEDIA_FAKE_ARTWORK)
+        final boolean hasBackdrop = backdropBitmap != null;
+        mKeyguardShowingMedia = hasBackdrop;
+
+        if ((hasBackdrop || DEBUG_MEDIA_FAKE_ARTWORK)
                 && (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
             // time to show some art!
             if (mBackdrop.getVisibility() != View.VISIBLE) {
@@ -1723,7 +1751,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mBackdropBack.setBackgroundColor(0xFFFFFFFF);
                     mBackdropBack.setImageDrawable(new ColorDrawable(c));
                 } else {
-                    mBackdropBack.setImageBitmap(artworkBitmap);
+                    mBackdropBack.setImageBitmap(backdropBitmap);
                 }
                 if (mScrimSrcModeEnabled) {
                     mBackdropBack.getDrawable().mutate().setXfermode(mSrcXferMode);
@@ -2016,7 +2044,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         } else {
             updateNotificationRanking(null);
         }
+    }
 
+    public boolean isKeyguardShowingMedia() {
+        return mKeyguardShowingMedia;
     }
 
     protected void updateHeadsUp(String key, Entry entry, boolean shouldInterrupt,
@@ -2316,7 +2347,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if (mNavigationBarView != null) {
             mNavigationBarView.setNavigationIconHints(hints);
-        }
+        }f
         checkBarModes();
     }
 
@@ -2549,7 +2580,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void scheduleAutohide() {
         cancelAutohide();
-        mHandler.postDelayed(mAutohide, AUTOHIDE_TIMEOUT_MS);
+        mHandler.postDelayed(mAutohide, isDeviceProvisioned()
+                ? AUTOHIDE_TIMEOUT_MS : AUTOHIDE_TIMEOUT_MS_PROVISIONING);
     }
 
     private void checkUserAutohide(View v, MotionEvent event) {
@@ -2924,6 +2956,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 if (DEBUG_MEDIA_FAKE_ARTWORK) {
                     updateMediaMetaData(true);
                 }
+            } else if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(action)) {
+                WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                        Context.WALLPAPER_SERVICE);
+                mKeyguardWallpaper = wm.getKeyguardBitmap();
+                updateMediaMetaData(true);
             }
         }
     };
@@ -2981,6 +3018,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateNotifications();
         resetUserSetupObserver();
         setControllerUsers();
+
+        WallpaperManager wm = (WallpaperManager)
+                mContext.getSystemService(Context.WALLPAPER_SERVICE);
+        wm.forgetLoadedKeyguardWallpaper();
+        mKeyguardWallpaper = wm.getKeyguardBitmap();
+        updateMediaMetaData(true);
+
         mAssistManager.onUserSwitched(newUserId);
     }
 

@@ -123,6 +123,9 @@
     <!-- Screen Capturing -->
     <uses-permission android:name="android.permission.MANAGE_MEDIA_PROJECTION" />
 
+    <!-- Weather -->
+    <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
+
     <!-- Assist -->
     <uses-permission android:name="android.permission.ACCESS_VOICE_INTERACTION_SERVICE" />
 
@@ -130,6 +133,9 @@
     <permission android:name="com.android.systemui.permission.SELF"
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
+
+    <!-- Wallpaper -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:name=".SystemUIApplication"
@@ -186,7 +192,7 @@
         </activity>
 
         <activity android:name=".tuner.TunerActivity"
-                  android:enabled="false"
+                  android:enabled="true"
                   android:icon="@drawable/tuner"
                   android:theme="@android:style/Theme.Material.Settings"
                   android:label="@string/system_ui_tuner"
