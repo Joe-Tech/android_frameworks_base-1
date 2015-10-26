@@ -117,7 +117,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
+<<<<<<< HEAD
 import com.android.internal.util.chroma.DevUtils;
+=======
+import com.android.internal.util.pm.DevUtils;
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 import com.android.internal.util.ScreenShapeHelper;
 import com.android.internal.widget.PointerLocationView;
 import com.android.server.LocalServices;

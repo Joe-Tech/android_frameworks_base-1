@@ -14,23 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-    <!-- Is Advanced Reboot enabled? -->
-    <bool name="config_advanced_reboot">true</bool>
-
-    <!-- The list of components which should be automatically disabled. -->
-    <string-array name="config_disabledComponents" translatable="false">
-    </string-array>
-
-    <!-- The list of components which should be forced to be enabled. -->
-    <string-array name="config_forceEnabledComponents" translatable="false">
-    </string-array>
-
-    <!-- kill app long press back -->
-    <integer name="config_backKillTimeout">1000</integer>
-<<<<<<< HEAD
-=======
-
->>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
+<resources>
+    <dimen name="weather_text_size">9sp</dimen>
 </resources>
