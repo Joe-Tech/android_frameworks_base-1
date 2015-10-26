@@ -16,10 +16,18 @@
 
 package com.android.systemui.qs.tiles;
 
+<<<<<<< HEAD
+import android.app.ActivityManager;
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+<<<<<<< HEAD
+import android.os.UserHandle;
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +89,16 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
+<<<<<<< HEAD
+    protected void handleUserSwitch(int newUserId) {
+        if (newUserId != UserHandle.USER_OWNER) {
+            refreshState();
+        }
+    }
+
+    @Override
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
     protected void handleClick() {
         MetricsLogger.action(mContext, getMetricsCategory());
         if (mDataController.isMobileDataSupported()) {
@@ -97,7 +115,12 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleUpdateState(SignalState state, Object arg) {
+<<<<<<< HEAD
+        state.visible = mController.hasMobileDataFeature()
+                && (ActivityManager.getCurrentUser() == UserHandle.USER_OWNER);
+=======
         state.visible = mController.hasMobileDataFeature();
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         if (!state.visible) return;
         CallbackInfo cb = (CallbackInfo) arg;
         if (cb == null) {

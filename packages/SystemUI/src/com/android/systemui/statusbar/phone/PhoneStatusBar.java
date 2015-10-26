@@ -220,6 +220,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private static final int STATUS_OR_NAV_TRANSIENT =
             View.STATUS_BAR_TRANSIENT | View.NAVIGATION_BAR_TRANSIENT;
     private static final long AUTOHIDE_TIMEOUT_MS = 3000;
+<<<<<<< HEAD
+    private static final long AUTOHIDE_TIMEOUT_MS_PROVISIONING = 0;
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 
     /** The minimum delay in ms between reports of notification visibility. */
     private static final int VISIBILITY_REPORT_MIN_DELAY_MS = 500;
@@ -318,6 +322,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private long mKeyguardFadingAwayDelay;
     private long mKeyguardFadingAwayDuration;
 
+<<<<<<< HEAD
+    private Bitmap mKeyguardWallpaper;
+
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
     int mKeyguardMaxNotificationCount;
 
     boolean mExpandedVisible;
@@ -624,6 +633,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Global.getUriFor(SETTING_HEADS_UP_TICKER), true,
                     mHeadsUpObserver);
         }
+<<<<<<< HEAD
+
+        WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                Context.WALLPAPER_SERVICE);
+        mKeyguardWallpaper = wm.getKeyguardBitmap();
+
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         mUnlockMethodCache = UnlockMethodCache.getInstance(mContext);
         mUnlockMethodCache.addListener(this);
         startKeyguard();
@@ -1701,11 +1718,19 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         // apply user lockscreen image
+<<<<<<< HEAD
+        if (mMediaMetadata == null && backdropBitmap == null) {
+            WallpaperManager wm = (WallpaperManager)
+                    mContext.getSystemService(Context.WALLPAPER_SERVICE);
+            if (wm != null) {
+                backdropBitmap = mKeyguardWallpaper;
+=======
         if (backdropBitmap == null) {
             WallpaperManager wm = (WallpaperManager)
                     mContext.getSystemService(Context.WALLPAPER_SERVICE);
             if (wm != null) {
                 backdropBitmap = wm.getKeyguardBitmap();
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
             }
         }
 
@@ -2339,7 +2364,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if (mNavigationBarView != null) {
             mNavigationBarView.setNavigationIconHints(hints);
+<<<<<<< HEAD
+        }f
+=======
         }
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         checkBarModes();
     }
 
@@ -2572,7 +2601,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void scheduleAutohide() {
         cancelAutohide();
+<<<<<<< HEAD
+        mHandler.postDelayed(mAutohide, isDeviceProvisioned()
+                ? AUTOHIDE_TIMEOUT_MS : AUTOHIDE_TIMEOUT_MS_PROVISIONING);
+=======
         mHandler.postDelayed(mAutohide, AUTOHIDE_TIMEOUT_MS);
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
     }
 
     private void checkUserAutohide(View v, MotionEvent event) {
@@ -2948,6 +2982,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     updateMediaMetaData(true);
                 }
             } else if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(action)) {
+<<<<<<< HEAD
+                WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                        Context.WALLPAPER_SERVICE);
+                mKeyguardWallpaper = wm.getKeyguardBitmap();
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
                 updateMediaMetaData(true);
             }
         }
@@ -3006,6 +3046,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateNotifications();
         resetUserSetupObserver();
         setControllerUsers();
+<<<<<<< HEAD
+
+        WallpaperManager wm = (WallpaperManager)
+                mContext.getSystemService(Context.WALLPAPER_SERVICE);
+        wm.forgetLoadedKeyguardWallpaper();
+        mKeyguardWallpaper = wm.getKeyguardBitmap();
+        updateMediaMetaData(true);
+
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         mAssistManager.onUserSwitched(newUserId);
     }
 

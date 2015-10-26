@@ -317,6 +317,15 @@ public class WallpaperManager {
             }
         }
 
+<<<<<<< HEAD
+        public void forgetLoadedKeyguardWallpaper() {
+            synchronized (this) {
+                mKeyguardWallpaper = null;
+            }
+        }
+
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         private Bitmap getCurrentWallpaperLocked(Context context) {
             if (mService == null) {
                 Log.w(TAG, "WallpaperService not running");
@@ -348,6 +357,13 @@ public class WallpaperManager {
         }
 
         private Bitmap getCurrentKeyguardWallpaperLocked(Context context) {
+<<<<<<< HEAD
+            if (mService == null) {
+                Log.w(TAG, "WallpaperService not running");
+                return null;
+            }
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
             try {
                 Bundle params = new Bundle();
                 ParcelFileDescriptor fd = mService.getKeyguardWallpaper(this, params);
@@ -715,6 +731,16 @@ public class WallpaperManager {
     }
 
     /**
+<<<<<<< HEAD
+     * @hide
+     */
+    public void forgetLoadedKeyguardWallpaper() {
+        sGlobals.forgetLoadedKeyguardWallpaper();
+    }
+
+    /**
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
      * If the current wallpaper is a live wallpaper component, return the
      * information about that wallpaper.  Otherwise, if it is a static image,
      * simply return null.

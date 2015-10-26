@@ -4594,7 +4594,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             out.append(" #");
             out.append(Integer.toHexString(id));
             final Resources r = mResources;
+<<<<<<< HEAD
+            if (id > 0 && Resources.resourceHasPackage(id) && r != null) {
+=======
             if (Resources.resourceHasPackage(id) && r != null) {
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
                 try {
                     String pkgname;
                     switch (id&0xff000000) {

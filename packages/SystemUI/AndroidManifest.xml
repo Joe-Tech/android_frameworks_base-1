@@ -134,6 +134,12 @@
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
+<<<<<<< HEAD
+    <!-- Wallpaper -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+=======
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"

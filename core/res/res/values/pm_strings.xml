@@ -39,6 +39,8 @@
 
     <!-- kill app long press back -->
     <string name="app_killed_message">Application killed </string>
+<<<<<<< HEAD
+=======
 
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
@@ -50,4 +52,5 @@
     <string name="global_action_search">Search</string>
     <string name="global_action_voicesearch">Voice Search</string>
 
+>>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 </resources>
