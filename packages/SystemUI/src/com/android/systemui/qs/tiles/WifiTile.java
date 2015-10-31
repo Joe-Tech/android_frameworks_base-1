@@ -265,14 +265,6 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
             MetricsLogger.action(mContext, MetricsLogger.QS_WIFI_TOGGLE, state);
             mController.setWifiEnabled(state);
             fireToggleStateChanged(state);
-<<<<<<< HEAD
-            if (state) {
-                mWifiController.scanForAccessPoints();
-                fireScanStateChanged(true);
-            }
-            setItemsVisible(state);
-=======
->>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
         }
 
         @Override

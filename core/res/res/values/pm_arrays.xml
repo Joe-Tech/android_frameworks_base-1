@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2015 Pure Marshmallow
-<<<<<<< HEAD
-=======
 
->>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
-     Licensed under the Apache License, Version 2.0 (the "License");
+          Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
 
@@ -34,11 +31,8 @@
         <item>recovery</item>
         <item>bootloader</item>
      </string-array>
-<<<<<<< HEAD
-=======
 
     <string-array name="notification_light_package_mapping" translatable="false">
         <item>com.google.android.gsf|com.google.android.talk</item>
     </string-array>
->>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 </resources>

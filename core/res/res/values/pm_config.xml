@@ -29,8 +29,5 @@
 
     <!-- kill app long press back -->
     <integer name="config_backKillTimeout">1000</integer>
-<<<<<<< HEAD
-=======
 
->>>>>>> c9cc199bd22af06874f30fd338d0eff42bb8a400
 </resources>
