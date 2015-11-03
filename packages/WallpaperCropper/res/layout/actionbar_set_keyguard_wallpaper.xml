@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
+<<<<<<< HEAD:packages/WallpaperCropper/res/layout/actionbar_set_keyguard_wallpaper.xml
 **
 ** Copyright 2013, The Android Open Source Project
+=======
+** Copyright 2015, The Android Open Source Project
+>>>>>>> 6d7b53e... Merge branch 'marshmallow-dr-release' of https://android.googlesource.com/platform/frameworks/base into mm:core/res/res/values-mcc204-mnc12/config.xml
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
+** You my obtain a copy of the License at
 **
 **     http://www.apache.org/licenses/LICENSE-2.0
 **
@@ -18,15 +22,9 @@
 */
 -->
 
-<TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/set_wallpaper_button"
-        style="@style/ActionBarSetWallpaperStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:paddingRight="20dp"
-        android:drawableLeft="@drawable/ic_actionbar_accept"
-        android:drawablePadding="8dp"
-        android:gravity="center_vertical"
-        android:text="@string/keyguard_wallpaper_instructions" />
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Don't use roaming icon for considered operators -->
+    <string-array translatable="false" name="config_operatorConsideredNonRoaming">
+        <item>20408</item>
+    </string-array>
+</resources>
